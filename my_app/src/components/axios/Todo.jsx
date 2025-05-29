@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import instance from './api/axios'
-import { resolvePath } from 'react-router-dom'
-import axios from 'axios'
-
+import { Box, Button, Stack, TextField, Typography } from "@mui/material"
 const Todo = () => {
     const [todos, setTodos] = useState([])
     const [title, setTitle] = useState('')
@@ -41,22 +39,45 @@ const Todo = () => {
             console.log('error occured : ', error);
         }
     }
+
     useEffect(() => {
         fetchTodos()
     }, [])
     return (
-        <div>
-            <input type="text" placeholder='Enter todo' value={title} onChange={handleTitleChange} /><br />
-            <button onClick={createTodo}>Add Todo</button>
-            <ul>{
-                todos.map((todo, id) => (
-                    <li key={id} style={{listStyle:"none"}}>
-                        <p>{todo.title}</p>
-                        <button onClick={()=>deleteTodo(todo.id)}>Delete</button>
-                    </li>
-                ))
-            }</ul>
-        </div>
+        <>
+            <Box sx={{ maxWidth: 500, mt: 4, p: 2, boxShadow: 3, borderRadius: 2, mb: 2 }}>
+                <Typography variant="h5" gutterBottom align="center">
+                    Todo App
+                </Typography>
+
+                <Box sx={{ display: "flex", gap: 2, mb: 4,mt:4 }}>
+                    <TextField label="Enter you tasks" variant="outlined" value={title} onChange={handleTitleChange} />
+                    <Button variant='contained' onClick={createTodo}>Add Todo</Button>
+                </Box>
+                {
+                    todos.map((todo, id) => (
+                        <Stack
+                            key={todo.id}
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="center"
+                            spacing={2}
+                            sx={{ border: '1px solid #ccc', borderRadius: 1, p: 1, mb: 1 }}
+                        >
+                            <Typography>{todo.title}</Typography>
+                            <Button
+                                variant="outlined"
+                                color="error"
+                                onClick={() => deleteTodo(todo.id)}
+                            >
+                                Delete
+                            </Button>
+                        </Stack>
+
+                    ))
+                }
+            </Box>
+        </>
     )
 }
 
